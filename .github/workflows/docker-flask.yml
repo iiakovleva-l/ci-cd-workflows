@@ -24,10 +24,6 @@ jobs:
             key: ${{ runner.os }}-buildx-${{ github.sha }}
             restore-keys: |
               ${{ runner.os }}-buildx-
-                
-        - name: Check Flask app logs
-          run: |
-                docker logs flask-app
 
         - name: Build Docker image
           run:  |
@@ -36,6 +32,14 @@ jobs:
         - name: Run Docker container
           run: |
                 docker run -d -p 5000:5000 --name flask-app flask-app:latest
+
+        - name: List Docker containers
+          run: |
+                docker ps -a
+        
+        - name: Check Flask app logs
+          run: |
+                docker logs flask-app || echo "No logs available"
             
         - name: Wait for the Flask app to start
           run: |
