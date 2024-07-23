@@ -29,7 +29,9 @@ jobs:
             FLASK_ENV: development
           run: |
             flask run --host=0.0.0.0 --port=5000 &
-            sleep 10
+            sleep 30
+            cat flask.log
+            netstat -tuln
 
         - name: Test Flask app
           run: |
