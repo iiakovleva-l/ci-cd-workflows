@@ -19,4 +19,5 @@ ENV FLASK_APP=hello.py
 ENV FLASK_ENV=development
 
 # Run app.py when the container launches
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0", "--debug"]
+
