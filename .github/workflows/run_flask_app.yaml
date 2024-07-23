@@ -20,17 +20,25 @@ jobs:
 
         - name: Install dependencies
           run: |
+                python -m venv venv
+                source venv/bin/activate
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
+        
+        - name: Verify Flask installation
+          run: |
+                source venv/bin/activate
+                flask --version
 
         - name: Run Flask app
           env:
             FLASK_APP: hello.py
             FLASK_ENV: development
           run: |
+            source venv/bin/activate
             flask run --host=0.0.0.0 --port=5000 &
             sleep 30
-            cat flask.log
+            if [ -f flask.log ]; then cat flask.log; else echo "flask.log not found"; fi
             netstat -tuln
 
         - name: Test Flask app
