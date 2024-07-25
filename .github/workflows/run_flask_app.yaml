@@ -50,6 +50,11 @@ jobs:
       run: |
         sudo rm -f /usr/local/bin/ngrok
 
+    - name: Check ngrok download URL
+      run: |
+        echo "Testing ngrok download URL"
+        wget -q --spider https://dl.ngrok.com/ngrok-v3-stable-linux-amd64.tgz || { echo 'ngrok URL not reachable'; exit 1; }
+
     - name: Download ngrok
       run: |
         wget -q https://dl.ngrok.com/ngrok-v3-stable-linux-amd64.tgz -O ngrok.tgz || { echo 'ngrok download failed'; exit 1; }
