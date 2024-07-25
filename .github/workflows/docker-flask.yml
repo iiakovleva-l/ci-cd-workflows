@@ -39,12 +39,6 @@ jobs:
         - name: Check Flask app logs
           run: |
                 docker logs flask-app || echo "No logs available"
-            
-        - name: Wait for the Flask app to start
-          run: |
-            sleep 30
-            docker ps
-            docker logs flask-app
 
         - name: Test Flask app
           run: |
