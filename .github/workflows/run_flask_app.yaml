@@ -50,11 +50,13 @@ jobs:
       run: |
         sudo rm -f /usr/local/bin/ngrok
 
-    - name: Install latest ngrok
+    - name: Download ngrok
       run: |
-        wget https://dl.ngrok.com/ngrok-v3-stable-linux-amd64.zip -O ngrok.zip
-        unzip -o ngrok.zip
-        sudo mv ngrok /usr/local/bin
+        wget -q https://dl.ngrok.com/ngrok-v3-stable-linux-amd64.tgz -O ngrok.tgz || { echo 'ngrok download failed'; exit 1; }
+
+    - name: Extract and Install ngrok
+      run: |
+        sudo tar xvzf ngrok.tgz -C /usr/local/bin || { echo 'ngrok extraction failed'; exit 1; }
         sudo chmod +x /usr/local/bin/ngrok
 
     - name: Display ngrok version
