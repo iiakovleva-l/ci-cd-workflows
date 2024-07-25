@@ -45,15 +45,12 @@ jobs:
             sleep 30
             netstat -tuln
 
-        - name: Install ngrok
+        - name: Install latest ngrok
           run: |
-              wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-              unzip ngrok-stable-linux-amd64.zip
+              wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -O ngrok.zip
+              unzip -o ngrok.zip
               sudo mv ngrok /usr/local/bin
               sudo chmod +x /usr/local/bin/ngrok
-        - name: Update ngrok to latest version
-          run: |
-                ngrok update
 
         - name: Configure ngrok with authtoken
           env:
