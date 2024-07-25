@@ -51,6 +51,9 @@ jobs:
               unzip ngrok-stable-linux-amd64.zip
               sudo mv ngrok /usr/local/bin
               sudo chmod +x /usr/local/bin/ngrok
+        - name: Update ngrok to latest version
+          run: |
+                ngrok update
 
         - name: Configure ngrok with authtoken
           env:
