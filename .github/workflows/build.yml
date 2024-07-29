@@ -33,6 +33,9 @@ jobs:
           docker tag flask-app:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
           docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
 
+      - name: Make generate-metadata.sh executable
+        run: chmod +x ./generate-metadata.sh
+        
       - name: Generate Docker image metadata
         run: ./generate-metadata.sh
         env:
