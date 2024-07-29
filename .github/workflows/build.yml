@@ -46,3 +46,33 @@ jobs:
         with:
             name: docker-image-metadata
             path: ./docker-image-metadata.json
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+            version: 'latest'
+        env:
+              GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+    
+      - name: Authenticate to Google Cloud
+        run: |
+              gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }}
+              gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+    
+      - name: Configure Docker to use Google Cloud auth
+        run: |
+              gcloud auth configure-docker --quiet
+    
+      - name: Set up kubectl
+        uses: google-github-actions/setup-kubectl@v2
+        with:
+              version: 'latest'
+    
+      - name: Get GKE credentials
+        run: |
+              gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE}} --project ${{ secrets.GCP_PROJECT_ID }}
+    
+      - name: Deploy to GKE
+        run: |
+              kubectl set image deployment/flask-app flask-app=ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
+              kubectl rollout status deployment/flask-app
