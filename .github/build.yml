@@ -1,0 +1,52 @@
+name: Build and Push Docker image
+
+on:
+  push:
+    branches:
+      - main
+
+
+#on:
+ # workflow_call:
+  #  inputs:
+   #   image-tag:
+    #    required: true
+     #   type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build Docker image
+        run: docker build -t flask-app:${{ inputs.image-tag }} .
+
+      - name: Push Docker image
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag flask-app:${{ inputs.image-tag }} ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ inputs.image-tag }}
+          docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ inputs.image-tag }}
+
+      - name: Upload Docker image metadata
+        uses: actions/upload-artifact@v2
+        with:
+          name: docker-image-metadata
+          path: ./docker-image-metadata.json
+        run: |
+          echo '{"image_tag": "${{ github.sha }}"}' > docker-image-metadata.json
+
+

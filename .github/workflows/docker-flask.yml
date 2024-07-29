@@ -1,4 +1,4 @@
-name: Run Flask App in Docker
+name: Run Flask App with Docker
 
 on:
   push:
