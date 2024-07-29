@@ -47,23 +47,24 @@ jobs:
             name: docker-image-metadata
             path: ./docker-image-metadata.json
 
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY  }}'
+
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-          version: 'latest'
+            version: 'latest'
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
-
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          credentials_json: '${{ secrets.GCP_SA_KEY  }}'
+            GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
       
       - name: Set up GKE credentials
         uses: google-github-actions/get-gke-credentials@v0
         with:
-            cluster_name: ${{ env.GKE_CLUSTER }}
-            location: ${{ env.GKE_ZONE }}
+            cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+            location: ${{ secrets.GKE_CLUSTER_ZONE }}
 
       - name: Install kubectl
         run: |
