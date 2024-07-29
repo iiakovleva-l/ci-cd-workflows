@@ -37,6 +37,6 @@ jobs:
 
       - name: Deploy to GKE
         run: |
-          IMAGE_TAG=$(cat ./metadata/docker-image-metadata.json | jq -r '.tag')
+          IMAGE_TAG=$(jq -r '.tag' ./metadata/docker-image-metadata.json)
           gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }}
           kubectl set image deployment/flask-app flask-app=ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$IMAGE_TAG
