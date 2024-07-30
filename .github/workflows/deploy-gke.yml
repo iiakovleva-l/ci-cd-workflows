@@ -70,9 +70,15 @@ jobs:
         run: |
           gcloud components install kubectl
 
-     
-
-      - name: Deploy to GKE
+      - name: Get GKE credentials
         run: |
-          kubectl set image deployment/flask-app flask-app=ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
-          kubectl rollout status deployment/flask-app
+            gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
+  
+      - name: Apply deployment
+        run: |
+            kubectl apply -f deployment.yaml
+  
+      - name: Update deployment image
+        run: |
+            kubectl set image deployment/flask-app flask-app=ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
+            kubectl rollout status deployment/flask-app
