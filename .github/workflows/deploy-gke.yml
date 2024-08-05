@@ -5,49 +5,53 @@ on:
     branches:
       - main
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
-  build:
+  build-push-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Build Docker image
-        run: docker build -t flask-app:${{ github.sha }} .
-
       - name: Log in to GitHub Container Registry
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Push Docker image
-        run: |
-          docker tag flask-app:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
-          docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.sha }}
-
-      - name: Make generate-metadata.sh executable
-        run: chmod +x ./generate-metadata.sh
-
-      - name: Generate Docker image metadata
-        run: ./generate-metadata.sh
-        env:
-            GITHUB_SHA: ${{ github.sha }}
-
-      - name: Upload Docker image metadata
-        uses: actions/upload-artifact@v3
+        uses: docker/login-action@v2
         with:
-            name: docker-image-metadata
-            path: ./docker-image-metadata.json
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'
