@@ -16,6 +16,9 @@ jobs:
       contents: read
       packages: write
       id-token: write
+      issues: write  # Adding this for attestation if needed
+      actions: write  # Ensuring actions write permissions for attestation
+
 
     steps:
       - name: Checkout repository
