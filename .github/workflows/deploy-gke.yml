@@ -38,7 +38,7 @@ jobs:
       - name: Get the latest image digest
         id: image-digest
         run: |
-          IMAGE_DIGEST=$(ghcr.io/${{ github.repository }} | jq -r '.[0].digest')
+          IMAGE_DIGEST=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/${{ github.repository }}/manifests/latest" | jq -r '.config.digest')
           echo "::set-output name=digest::${IMAGE_DIGEST}"
 
       - name: Configure kubectl
