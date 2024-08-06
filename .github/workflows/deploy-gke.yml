@@ -38,8 +38,12 @@ jobs:
       - name: Get the latest image digest
         id: image-digest
         run: |
-          IMAGE_DIGEST=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/${{ github.repository }}/manifests/latest" | jq -r '.config.digest')
-          echo "::set-output name=digest::${IMAGE_DIGEST}"
+          DIGEST=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/${{ github.repository }}/manifests/latest" | jq -r '.config.digest')
+          echo "Retrieved digest: ${DIGEST}"
+          echo "digest=${DIGEST}" >> $GITHUB_ENV
+
+      - name: Debug image digest
+        run: echo "Image digest is ${{ env.digest }}"
 
       - name: Configure kubectl
         run: |
@@ -47,7 +51,7 @@ jobs:
 
       - name: Update deployment image
         run: |
-          kubectl set image deployment/flask-app flask-app=ghcr.io/${{ github.repository }}@${{ steps.image-digest.outputs.digest }}
+          kubectl set image deployment/flask-app flask-app=ghcr.io/${{ github.repository }}@${{ env.digest }}
 
       - name: Verify deployment rollout
         run: |
