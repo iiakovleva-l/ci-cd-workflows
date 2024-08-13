@@ -41,6 +41,13 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+            registry: ${{ env.REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Get the latest image digest
         id: image-digest
         run: |
