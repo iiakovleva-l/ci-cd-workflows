@@ -9,6 +9,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      issues: write  
+      actions: write 
 
     steps:
       - name: Checkout repository
@@ -38,7 +44,7 @@ jobs:
       - name: Get the latest image digest
         id: image-digest
         run: |
-          RESPONSE=$(curl -s -H "Authorization: Bearer <YOUR_TOKEN>" "https://ghcr.io/v2/iiakovleva-l/playground/manifests/latest")
+          RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.GHCR_PAT }}" "https://ghcr.io/v2/iiakovleva-l/playground/manifests/latest")
           echo "Response from GHCR: $RESPONSE"
           DIGEST=$(echo "$RESPONSE" | jq -r '.config.digest')
           if [ "$DIGEST" == "null" ] || [ -z "$DIGEST" ]; then
