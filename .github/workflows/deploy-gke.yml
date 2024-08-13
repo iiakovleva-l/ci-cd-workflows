@@ -38,7 +38,11 @@ jobs:
       - name: Get the latest image digest
         id: image-digest
         run: |
-          DIGEST=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/${{ github.repository }}/manifests/latest" | jq -r '.config.digest')
+          DIGEST=$(curl -s -H "Authorization: Bearer ${{ secrets.GHCR_PAT }}" "https://ghcr.io/v2/${{ github.repository }}/manifests/latest" | jq -r '.config.digest')
+          if [ "$DIGEST" == "null" ] || [ -z "$DIGEST" ]; then
+            echo "Failed to retrieve image digest"
+            exit 1
+          fi
           echo "Retrieved digest: ${DIGEST}"
           echo "digest=${DIGEST}" >> $GITHUB_ENV
 
