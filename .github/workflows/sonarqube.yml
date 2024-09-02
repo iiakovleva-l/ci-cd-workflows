@@ -26,7 +26,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@<action version> # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+        uses: sonarsource/sonarqube-scan-action@v2.3.0
         env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             SONAR_HOST_URL: "https://sonarcloud.io/organizations/iiakovleva-l/projects"
