@@ -34,9 +34,10 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          sonar-scanner \
             -Dsonar.projectKey="iiakovleva-l_playground" \
             -Dsonar.sources=. \
-            -Dsonar.host.url="https://sonarcloud.io/project/overview?id=iiakovleva-l_playground" \
+            -Dsonar.host.url="https://sonarcloud.io" \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.python.coverage.reportPaths=coverage.xml
 
