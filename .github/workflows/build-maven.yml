@@ -20,7 +20,7 @@ on:
             maven-options:
                 required: false
                 type: string
-                descriptions: "additional maven options"
+                description: "additional maven options"
         secrets:
             maven-username:
                 required: false
