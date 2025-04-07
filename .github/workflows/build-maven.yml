@@ -46,23 +46,23 @@ jobs:
               with:
                 java-version: ${{ inputs.java-version }}
                 distribution: 'temurin'
-                settings-file: ${{ inputs.mave-settings-file }}
+                # settings-file: ${{ inputs.mave-settings-file }}
 
-            - name: Configure Maven credentials (if provided)
-              if: ${{ secrets.maven-central-username != '' && secrets.maven-central-password != '' }}
-              run: |
-                  mkdir -p ~/.m2
-                  cat <<EOF > ~/.m2/settings.xml
-                  <settings>
-                    <servers>
-                      <server>
-                        <id>maven-central</id>
-                        <username>${{ secrets.maven-central-username }}</username>
-                        <password>${{ secrets.maven-central-password }}</password>
-                      </server>
-                    </servers>
-                  </settings>
-                  EOF
+            # - name: Configure Maven credentials (if provided)
+            #   if: ${{ secrets.maven-central-username != '' && secrets.maven-central-password != '' }}
+            #   run: |
+            #       mkdir -p ~/.m2
+            #       cat <<EOF > ~/.m2/settings.xml
+            #       <settings>
+            #         <servers>
+            #           <server>
+            #             <id>maven-central</id>
+            #             <username>${{ secrets.maven-central-username }}</username>
+            #             <password>${{ secrets.maven-central-password }}</password>
+            #           </server>
+            #         </servers>
+            #       </settings>
+            #       EOF
             - name: Build Maven
               id: maven-build-step
               run: mvn ${{ inputs.maven-goals }} ${{ inputs.maven-options}}
