@@ -28,10 +28,7 @@ on:
             maven-password:
                 required: false
                 description: "Password for Maven Central or other private repositories"
-        outputs:
-            build-status:
-                description: "Statud of the maven build"
-                value: ${{ jobs.build.outcome }}
+
 
 jobs:
     build-maven:

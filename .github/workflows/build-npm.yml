@@ -21,7 +21,7 @@ on:
       npm-test-options:
         required: false
         type: string
-        default: 'npm run test'
+        default: 'npm test'
         description: "additional npm test options"
 
 jobs:
