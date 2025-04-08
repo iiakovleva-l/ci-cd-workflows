@@ -33,7 +33,11 @@ on:
 jobs:
     build-maven:
         runs-on: ubuntu-latest
-
+        permissions:
+            contents: read
+            id-token: write
+            packages: write
+            
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
