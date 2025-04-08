@@ -1,7 +1,7 @@
 name: Build npm
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       node-version:
         required: false
