@@ -30,9 +30,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read 
+    permissions: write-all
 
     steps:
       - name: Checkout code
