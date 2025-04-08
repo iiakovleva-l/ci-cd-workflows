@@ -27,8 +27,6 @@ on:
         default: true
         description: 'Whether to push the Docker image'
 
-    
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -58,5 +56,5 @@ jobs:
           context: ${{ inputs.context }}
           file: ${{ inputs.dockerfile }}
           push: ${{ inputs.push }}
-          tags: ${{ format('{0}/{1}:{2}', inputs.registry, github.repository, inputs.image_tags) }}
+          tags: ${{ inputs.image_tags}}
           
