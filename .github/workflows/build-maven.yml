@@ -38,7 +38,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: CHeckout code
+            - name: Checkout code
               uses: actions/checkout@v4
 
             - name: Set up JDK ${{ inputs.java-version }}
@@ -46,7 +46,7 @@ jobs:
               with:
                 java-version: ${{ inputs.java-version }}
                 distribution: 'temurin'
-                # settings-file: ${{ inputs.mave-settings-file }}
+                # settings-file: ${{ inputs.maven-settings-file }}
 
             # - name: Configure Maven credentials (if provided)
             #   if: ${{ secrets.maven-central-username != '' && secrets.maven-central-password != '' }}
