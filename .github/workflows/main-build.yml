@@ -42,7 +42,7 @@ jobs:
             
             - name: Run Docker build
               if: ${{ inputs.build-type }} == 'docker'
-              uses: ./.github/workflows/build-docker.yml
+              uses: iiakovleva-l/ci-cd-workflows/.github/workflows/build-docker.yml@main
               with:
                 dockerfile: ${{ github.workspace }}/Dockerfile
                 image_tags: ghcr.io/${{ github.repository }}:latest
