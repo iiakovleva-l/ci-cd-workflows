@@ -38,10 +38,19 @@ jobs:
             - name: Run Docker build
               if: ${{ inputs.build-type }} == 'docker'
               uses: ./.github/workflows/build-docker.yml
+              with:
+                dockerfile: Dockerfile
+                context: .
+                image_tags: ghcr.io/${{ github.repository }}:latest
+                registry: ghcr.io
+                push: true
 
             - name: Run Maven build
               if: ${{ inputs.build-type }} == 'maven'
               uses: ./.github/workflows/build-maven.yml
+              with:
+                java-version: '17'
+                maven-goals: 'clean package'
 
             - name: Run NPM build
               if: ${{ inputs.build-type }} == 'npm'
