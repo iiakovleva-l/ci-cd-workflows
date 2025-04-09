@@ -10,7 +10,7 @@ on:
                 
 jobs:
     choose-build:
-        runs-on: ububntu-latest
+        runs-on: ubuntu-latest
 
         steps:
             - name: Choose build type
