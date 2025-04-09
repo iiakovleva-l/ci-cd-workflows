@@ -46,8 +46,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
           
-      - name: Change working directory to workspace
-        run: cd ${{ github.workspace }}
 
       - name: Build and push Docker image
         id: docker_build

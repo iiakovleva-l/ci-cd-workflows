@@ -34,7 +34,12 @@ jobs:
                     echo "Unknown build type: ${{ inputs.build-type }}"
                     exit 1
                 fi
-
+            - name: List files in workspace
+              run: |
+                echo "Listing files in workspace:"
+                ls ${{ github.workspace }}
+           
+            
             - name: Run Docker build
               if: ${{ inputs.build-type }} == 'docker'
               uses: ./.github/workflows/build-docker.yml
