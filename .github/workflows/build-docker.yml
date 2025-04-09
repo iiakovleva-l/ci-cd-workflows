@@ -28,7 +28,7 @@ on:
         description: 'Whether to push the Docker image'
 
 jobs:
-  build:
+  docker-build:
     runs-on: ubuntu-latest
     permissions: write-all
 

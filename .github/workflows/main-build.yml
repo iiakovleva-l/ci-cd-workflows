@@ -1,0 +1,45 @@
+name: Main build workflow
+
+on:
+   workflow_call:
+        inputs:
+            build-type:
+                description: 'Type of build to perform'
+                required: true
+                type: string
+                
+jobs:
+    choose-build:
+        runs-on: ububntu-latest
+
+        steps:
+            - name: Choose build type
+              id: build-type
+              run: |
+                echo "Build type is ${{ inputs.build-type }}"
+                if [ "${{ inputs.build-type }}" == "docker" ]; then
+                    echo "Running Docker build"
+                    echo "::set-output name=build-type::docker"
+                elif [ "${{ inputs.build-type }}" == "maven" ]; then
+                    echo "Running Maven build"
+                    echo "::set-output name=build-type::maven"
+                elif [ "${{ inputs.build-type }}" == "npm" ]; then
+                    echo "Running NPM build"
+                    echo "::set-output name=build-type::npm"
+                else
+                    echo "Unknown build type: ${{ inputs.build-type }}"
+                    exit 1
+                fi
+
+            - name: Run Docker build
+              if: ${{ inputs.build-type }} == 'docker'
+              uses: ./.github/workflows/build-docker.yml
+
+            - name: Run Maven build
+              if: ${{ inputs.build-type }} == 'maven'
+              uses: ./.github/workflows/build-maven.yml
+
+            - name: Run NPM build
+              if: ${{ inputs.build-type }} == 'npm'
+              uses: ./.github/workflows/build-npm.yml
+
