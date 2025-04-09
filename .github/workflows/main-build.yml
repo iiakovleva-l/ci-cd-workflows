@@ -39,8 +39,8 @@ jobs:
               if: ${{ inputs.build-type }} == 'docker'
               uses: ./.github/workflows/build-docker.yml
               with:
-                dockerfile: ./Dockerfile
-                context: .
+                dockerfile: ${{ github.workspace }}/Dockerfile
+                context: ${{ github.workspace }}
                 image_tags: ghcr.io/${{ github.repository }}:latest
                 registry: ghcr.io
                 push: true
