@@ -13,19 +13,23 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            
+            - name: Checkout code
+              uses: actions/checkout@v4
+
             - name: Choose build type
               id: build-type
               run: |
                 echo "Build type is ${{ inputs.build-type }}"
                 if [ "${{ inputs.build-type }}" == "docker" ]; then
                     echo "Running Docker build"
-                    echo "::set-output name=build-type::docker"
+                    echo "build-type=docker" >> $GITHUB_OUTPUT
                 elif [ "${{ inputs.build-type }}" == "maven" ]; then
                     echo "Running Maven build"
-                    echo "::set-output name=build-type::maven"
+                    echo "build-type=maven" >> $GITHUB_OUTPUT
                 elif [ "${{ inputs.build-type }}" == "npm" ]; then
                     echo "Running NPM build"
-                    echo "::set-output name=build-type::npm"
+                    echo "build-type=npm" >> $GITHUB_OUTPUT
                 else
                     echo "Unknown build type: ${{ inputs.build-type }}"
                     exit 1
