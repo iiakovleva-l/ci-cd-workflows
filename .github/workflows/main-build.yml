@@ -36,7 +36,6 @@ jobs:
                 fi
            
     docker-build-job:
-        runs-on: ubuntu-latest
         if: ${{ inputs.build-type  == 'docker' }}
         uses: iiakovleva-l/ci-cd-workflows/.github/workflows/build-docker.yml@main
         with:
@@ -46,7 +45,6 @@ jobs:
           push: true
 
     maven-build-job:
-        runs-on: ubuntu-latest
         if: ${{ inputs.build-type == 'maven' }}
         uses: iiakovleva-l/ci-cd-workflows/.github/workflows/build-maven.yml@main
         with:
@@ -54,7 +52,6 @@ jobs:
           maven-goals: 'clean package'
 
     npm-build-job:          
-        runs-on: ubuntu-latest
         if: ${{ inputs.build-type  == 'npm' }}
         uses: iiakovleva-l/ci-cd-workflows/.github/workflows/build-npm.yml@main
         with:
